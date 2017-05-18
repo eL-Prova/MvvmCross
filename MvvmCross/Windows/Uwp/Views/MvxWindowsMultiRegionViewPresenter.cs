@@ -75,7 +75,7 @@ namespace MvvmCross.Uwp.Views
             var viewFinder = Mvx.Resolve<IMvxViewsContainer>();
             return viewFinder.GetViewType(request.ViewModelType);
         }
-
+		
         // Implementation from: http://stackoverflow.com/a/1759923/80186
         protected internal static T FindChild<T>(DependencyObject reference, string childName) where T : DependencyObject
         {
@@ -123,7 +123,13 @@ namespace MvvmCross.Uwp.Views
                     break;
                 }
             }
-
+			
+			var contentPresenter = reference as ContentPresenter;
+            if (contentPresenter != null && contentPresenter.Content is DependencyObject)
+            {
+                nextPhase.Add((DependencyObject)contentPresenter.Content);
+            }
+			
             // if failed to find the child, search inside the frames we found
             if (foundChild == null)
             {
